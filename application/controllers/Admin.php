@@ -265,5 +265,33 @@ class Admin extends CI_Controller {
 			redirect("admin/index");
 		}
 	}
-
+	
+	public function editpost() {
+		$this->form_validation->set_rules("title","Title","required");
+		$this->form_validation->set_rules("desc","Description","required");
+		$this->form_validation->set_rules("content","Content","required");
+		
+		if($this->form_validation->run() === FALSE) {
+			$this->load->view("admin/editpost");
+		}
+		else {
+			$res = $this->blog->edit();
+			if($res != false) {
+				$error = array(
+					"error-msg" => "Berhasil mengedit post",
+					"error-type" => "success"
+				);
+				$this->session->set_flashdata($error);
+				$this->load->view("admin/editpost");
+			}
+			else {
+				$error = array(
+					"error-msg" => "Gagal mengedit post !",
+					"error-type" => "danger"
+				);
+				$this->session->set_flashdata($error);
+				$this->load->view("admin/editpost");
+			}
+		}
+	}	
 }
